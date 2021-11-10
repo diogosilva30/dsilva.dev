@@ -1,0 +1,31 @@
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy-job:
+    runs-on: self-hosted
+    # Only trigger a deploy for a PUSH on main branch
+    # https://docs.github.com/pt/actions/reference/context-and-expression-syntax-for-github-actions#github-context
+    # https://docs.github.com/pt/actions/reference/workflow-syntax-for-github-actions
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+        # Get code from repository
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        # Deploy
+      - name: Deploy Docker Stack
+        run: docker stack deploy -c traefik-loadbalancer.yml traefik-loadbalancer
+        # Clean unused data to save space
+      - name: Clean Unused Data
+        run: docker system prune -a -f
