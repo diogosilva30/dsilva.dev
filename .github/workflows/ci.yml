@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
         # Deploy
       - name: Deploy Docker Stack
-        run: docker stack deploy -c traefik-loadbalancer.yml traefik-loadbalancer
+        run: docker stack deploy -c traefik-loadbalancer.yml loadbalancer
         # Clean unused data to save space
       - name: Clean Unused Data
         run: docker system prune -a -f
