@@ -77,10 +77,10 @@ services:
       - --providers.docker.exposedbydefault=false
       # Enable Docker Swarm mode
       - --providers.docker.swarmmode
-      # Create an entrypoint "http" listening on address 80
-      - --entrypoints.http.address=:80
-      # Create an entrypoint "https" listening on address 443
-      - --entrypoints.https.address=:443
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      - --entrypoints.websecure.address=:443
       # Create the certificate resolver "le" for Let's Encrypt, uses the environment variable EMAIL
       - --certificatesresolvers.le.acme.email=email@dsilva.dev
       # Store the Let's Encrypt certificates in the mounted volume
