@@ -105,3 +105,29 @@ services:
       - traefik-public
 
 
+  whoami:
+    image: "traefik/whoami"
+
+    deploy:
+      labels:
+        - traefik.enable=true
+        # Use the traefik-public network
+        - traefik.docker.network=traefik-public
+        # Use the custom label "traefik.constraint-label=traefik-public"
+        # Traefik will only use services with this label
+        # - traefik.constraint-label=traefik-public
+
+        # traefik-http set up only to use the middleware to redirect to https
+        - traefik.http.routers.whoami-http.rule=Host(`whoami.diogosilva.tech`)
+        - traefik.http.routers.whoami-public-http.entrypoints=http
+        - traefik.http.routers.whoami-public-http.middlewares=https-redirect
+        # traefik-https the actual router using HTTPS
+        - traefik.http.routers.whoami-public-https.rule=Host(`whoami.diogosilva.tech`)
+        - traefik.http.routers.whoami-public-https.entrypoints=https
+        - traefik.http.routers.whoami-public-https.tls=true
+        - traefik.http.routers.whoami-secured.tls.certresolver=le
+      
+    networks:
+      # Use the public network created to be shared between Traefik and
+      # any other service that needs to be publicly available with HTTPS
+      - traefik-public
