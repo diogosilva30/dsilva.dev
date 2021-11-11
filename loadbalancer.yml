@@ -118,14 +118,16 @@ services:
         # - traefik.constraint-label=traefik-public
 
         # traefik-http set up only to use the middleware to redirect to https
-        - traefik.http.routers.whoami-http.rule=Host(`whoami.diogosilva.tech`)
+        - traefik.http.routers.whoami-public-http.rule=Host(`whoami.diogosilva.tech`)
         - traefik.http.routers.whoami-public-http.entrypoints=http
         - traefik.http.routers.whoami-public-http.middlewares=https-redirect
         # traefik-https the actual router using HTTPS
         - traefik.http.routers.whoami-public-https.rule=Host(`whoami.diogosilva.tech`)
         - traefik.http.routers.whoami-public-https.entrypoints=https
         - traefik.http.routers.whoami-public-https.tls=true
-        - traefik.http.routers.whoami-secured.tls.certresolver=le
+        - "traefik.http.routers.whoami-secured.tls.certresolver=le"
+        # Define the port inside of the Docker service to use
+        - traefik.http.services.whoami.loadbalancer.server.port=8080
       
     networks:
       # Use the public network created to be shared between Traefik and
