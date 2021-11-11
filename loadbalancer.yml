@@ -1,6 +1,21 @@
 # From: https://dockerswarm.rocks/traefik/
 version: '3.3'
 
+
+volumes:
+  # Create a volume to store the certificates, there is a constraint to make sure
+  # Traefik is always deployed to the same Docker node with the same volume containing
+  # the HTTPS certificates
+  traefik-public-certificates:
+
+networks:
+  # Use the previously created public network "traefik-public", shared with other
+  # services that need to be publicly available via this Traefik
+  traefik-public:
+    external: true
+
+
+
 services:
 
   traefik:
@@ -29,7 +44,7 @@ services:
         # Use the custom label "traefik.constraint-label=traefik-public"
         # This public Traefik will only use services with this label
         # That way you can add other internal Traefik instances per stack if needed
-        - traefik.constraint-label=traefik-public
+        # - traefik.constraint-label=traefik-public
         # admin-auth middleware with HTTP Basic auth
         # Using the environment variables USERNAME and HASHED_PASSWORD
         - traefik.http.middlewares.admin-auth.basicauth.users=admin:$$apr1$$aJxfzY1Z$$Kh6FWCDTR/GKEXalL1qdT0
@@ -90,14 +105,3 @@ services:
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
 
-volumes:
-  # Create a volume to store the certificates, there is a constraint to make sure
-  # Traefik is always deployed to the same Docker node with the same volume containing
-  # the HTTPS certificates
-  traefik-public-certificates:
-
-networks:
-  # Use the previously created public network "traefik-public", shared with other
-  # services that need to be publicly available via this Traefik
-  traefik-public:
-    external: true
