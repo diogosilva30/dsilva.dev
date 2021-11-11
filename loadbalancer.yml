@@ -108,23 +108,24 @@ services:
 
   whoami:
     image: "traefik/whoami"
-    labels:
-      - traefik.enable=true
-      # Use the traefik-public network
-      - traefik.docker.network=traefik-public
-      # Use the custom label "traefik.constraint-label=traefik-public"
-      # Traefik will only use services with this label
-      # - traefik.constraint-label=traefik-public
+    
+    deploy:
+      labels:
+        - traefik.enable=true
+        # Use the traefik-public network
+        - traefik.docker.network=traefik-public
+        # Use the custom label "traefik.constraint-label=traefik-public"
+        # Traefik will only use services with this label
+        # - traefik.constraint-label=traefik-public
 
-      - "traefik.http.routers.whoami.rule=Host(`whoami.diogosilva.tech`)"
-      - "traefik.http.routers.whoami.entrypoints=web"
-      - "traefik.http.services.whoami.loadbalancer.server.port=80" # it seems you always need to give traefik a port so it 'notices' the service
-      - "traefik.http.routers.whoami-secured.rule=Host(`whoami.diogosilva.tech`)"
-      - "traefik.http.routers.whoami-secured.entrypoints=web-secured"
-      - "traefik.http.routers.whoami-secured.tls.certresolver=le"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.diogosilva.tech`)"
+        - "traefik.http.routers.whoami.entrypoints=web"
+        - "traefik.http.services.whoami.loadbalancer.server.port=80" # it seems you always need to give traefik a port so it 'notices' the service
+        - "traefik.http.routers.whoami-secured.rule=Host(`whoami.diogosilva.tech`)"
+        - "traefik.http.routers.whoami-secured.entrypoints=web-secured"
+        - "traefik.http.routers.whoami-secured.tls.certresolver=le"
       
     networks:
       # Use the public network created to be shared between Traefik and
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
-      
