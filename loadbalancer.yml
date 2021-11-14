@@ -1,5 +1,5 @@
 # From: https://dockerswarm.rocks/traefik/
-version: '3.3'
+version: '3.8'
 
 
 volumes:
@@ -7,6 +7,7 @@ volumes:
   # Traefik is always deployed to the same Docker node with the same volume containing
   # the HTTPS certificates
   traefik-public-certificates:
+  vault:
 
 networks:
   # Use the previously created public network "traefik-public", shared with other
@@ -93,5 +94,41 @@ services:
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
 
+
+  # Hashicorp vault for secret management
+  vault:
+    image: vault:1.8.4
+
+    deploy:
+      replicas: 1
+      labels:
+        - traefik.enable=true
+        # Use the traefik-public network
+        - traefik.docker.network=traefik-public
+        # Add required label for traefik (Traefik will only use services with this label)
+        - traefik.constraint-label=traefik-public
+        # Add routing for this service
+        - traefik.http.routers.whoami-secured.rule=Host(`vault.dsilva.dev`)
+        - traefik.http.routers.whoami-secured.tls.certresolver=le
+        # Define the port inside of the Docker service to use
+        - traefik.http.services.whoami.loadbalancer.server.port=8200
+
+    environment:
+      - VAULT_ADDR=http://127.0.0.1:8200 # Run on port 8200
+      - VAULT_API_ADDR=http://127.0.0.1:8200
+      - VAULT_LOCAL_CONFIG={"backend":{"file":{"path":"vault/file"}},"listener":{"tcp":{"address":"0.0.0.0:8200","tls_disable":1}},"ui":true, "disable_mlock":true}
+    cap_add:
+      - IPC_LOCK
+    command: server
+    volumes:
+      - vault:/vault/file
+
+  # Autoupdate docker images in the network
+  dockupdater:
+    image: dockupdater/dockupdater
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
   
