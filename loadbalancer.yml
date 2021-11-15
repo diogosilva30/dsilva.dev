@@ -50,7 +50,7 @@ services:
         # admin-auth middleware with HTTP Basic auth
         - traefik.http.middlewares.admin-auth.basicauth.users=admin:$$apr1$$aJxfzY1Z$$Kh6FWCDTR/GKEXalL1qdT0
         # Add routing for this service
-        - traefik.http.routers.traefik-public.rule=Host(`traefik.diogosilva.tech`)
+        - traefik.http.routers.traefik-public.rule=Host(`traefik.dsilva.dev`)
         # Use the special Traefik service api@internal with the web UI/Dashboard
         - traefik.http.routers.traefik-public.service=api@internal
         # Use the "le" (Let's Encrypt) resolver created below
