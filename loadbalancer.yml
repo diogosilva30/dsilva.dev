@@ -108,10 +108,10 @@ services:
         # Add required label for traefik (Traefik will only use services with this label)
         - traefik.constraint-label=traefik-public
         # Add routing for this service
-        - traefik.http.routers.whoami-secured.rule=Host(`vault.dsilva.dev`)
-        - traefik.http.routers.whoami-secured.tls.certresolver=le
+        - traefik.http.routers.vault.rule=Host(`vault.dsilva.dev`)
+        - traefik.http.routers.vault.tls.certresolver=le
         # Define the port inside of the Docker service to use
-        - traefik.http.services.whoami.loadbalancer.server.port=8200
+        - traefik.http.services.vault.loadbalancer.server.port=8200
 
     environment:
       - VAULT_ADDR=http://127.0.0.1:8200 # Run on port 8200
