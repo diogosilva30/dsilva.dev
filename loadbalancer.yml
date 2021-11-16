@@ -83,9 +83,9 @@ services:
 #         - traefik.http.routers.http-catchall.middlewares=redirect-to-https
 #         - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
         
-        - traefik.http.routers.wildcard-certs.tls.certresolver=le
-        - "traefik.http.routers.wildcard-certs.tls.domains[0].main=dsilva.dev"
-        - "traefik.http.routers.wildcard-certs.tls.domains[0].sans=*.dsilva.dev"
+        - traefik.http.routers.traefik.tls.certresolver=le
+        - "traefik.http.routers.traefik.tls.domains[0].main=dsilva.dev"
+        - "traefik.http.routers.traefik.tls.domains[0].sans=*.dsilva.dev"
         
         # dashboard
         - traefik.http.routers.traefik.rule=Host(`traefik.dsilva.dev`)
