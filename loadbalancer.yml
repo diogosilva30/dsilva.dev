@@ -77,12 +77,7 @@ services:
         # That way you can add other internal Traefik instances per stack if needed
         - traefik.constraint-label=traefik-public
         
-        # global redirect to https
-#         - traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)
-#         - traefik.http.routers.http-catchall.entrypoints=web
-#         - traefik.http.routers.http-catchall.middlewares=redirect-to-https
-#         - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
-        
+        # Wildcard certificates
         - traefik.http.routers.traefik.tls.certresolver=le
         - "traefik.http.routers.traefik.tls.domains[0].main=dsilva.dev"
         - "traefik.http.routers.traefik.tls.domains[0].sans=*.dsilva.dev"
