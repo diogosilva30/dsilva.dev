@@ -1,7 +1,7 @@
 # From: https://dockerswarm.rocks/traefik/
 version: '3.8'
 
-
+# Define volumes
 volumes:
   # Create a volume to store the certificates, there is a constraint to make sure
   # Traefik is always deployed to the same Docker node with the same volume containing
@@ -9,6 +9,7 @@ volumes:
   traefik-public-certificates:
   vault:
 
+# Define networks
 networks:
   # Use the previously created public network "traefik-public", shared with other
   # services that need to be publicly available via this Traefik
@@ -16,10 +17,15 @@ networks:
     driver: overlay
     external: true
 
+# Use external Docker secrets
+secrets:
+  do_auth_token:
+    external: true
 
-
+# Define services
 services:
-
+  
+  # The main loadbalancer
   traefik:
     # Use the latest Traefik image
     image: traefik:v2.2
