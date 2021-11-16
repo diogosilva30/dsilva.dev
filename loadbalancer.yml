@@ -53,8 +53,6 @@ services:
         - traefik.http.routers.traefik-public.rule=Host(`traefik.dsilva.dev`)
         # Use the special Traefik service api@internal with the web UI/Dashboard
         - traefik.http.routers.traefik-public.service=api@internal
-        # Use the "le" (Let's Encrypt) resolver created below
-        - traefik.http.routers.traefik-public.tls.certresolver=le
         # Enable HTTP Basic auth, using the middleware created above
         - traefik.http.routers.traefik-public.middlewares=admin-auth
         # Define the port inside of the Docker service to use
@@ -79,10 +77,16 @@ services:
       - --entrypoints.websecure.address=:443
       # Create the certificate resolver "le" for Let's Encrypt, uses the environment variable EMAIL
       - --certificatesresolvers.le.acme.email=email@dsilva.dev
+      # Use DNS Challenge to provide wild card certificates
+      - --certificatesresolvers.le.acme.dnschallenge=true
+      # A provider must be specified
+      - --certificatesresolvers.le.acme.dnschallenge.provider=digitalocean
       # Store the Let's Encrypt certificates in the mounted volume
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
-      # Use the TLS Challenge for Let's Encrypt
-      - --certificatesresolvers.le.acme.tlschallenge=true
+      # Main domain
+      - --entrypoints.websecure.http.tls.domains[0].main=dsilva.dev
+      # Wild card domain
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.dsilva.dev
       # Enable the access log, with HTTP requests
       - --accesslog
       # Enable the Traefik log, for configurations and errors
@@ -109,7 +113,6 @@ services:
         - traefik.constraint-label=traefik-public
         # Add routing for this service
         - traefik.http.routers.vault.rule=Host(`vault.dsilva.dev`)
-        - traefik.http.routers.vault.tls.certresolver=le
         # Define the port inside of the Docker service to use
         - traefik.http.services.vault.loadbalancer.server.port=8200
 
