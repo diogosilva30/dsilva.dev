@@ -59,6 +59,11 @@ services:
         - traefik.http.routers.http-catchall.middlewares=redirect-to-https
         - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
         
+        # use the default certificate resolver
+        - traefik.http.routers.traefik.tls.certresolver=default
+        # wildcard certificate to use
+        - traefik.http.routers.traefik.tls.domains[0].main=dsilva.dev
+        - traefik.http.routers.traefik.tls.domains[0].sans=*.dsilva.dev
         
         # dashboard
         - traefik.http.routers.traefik.rule=Host(`traefik.dsilva.dev`)
@@ -98,10 +103,6 @@ services:
       - --certificatesresolvers.myresolver.acme.dnschallenge.delaybeforecheck=0
       # Store the Let's Encrypt certificates in the mounted volume
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
-      # Main domain
-      - --entrypoints.websecure.http.tls.domains[0].main=dsilva.dev
-      # Wild card domain
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.dsilva.dev
       # Enable the access log, with HTTP requests
       - --accesslog
       # Enable the Traefik log, for configurations and errors
