@@ -101,12 +101,12 @@ services:
     # Mount secrets from Docker
     secrets:
       # Digital Ocean auth token for WildCard DNS Challenge
-      - DO_AUTH_TOKEN
+      - do_auth_token
     
     # Environment variables
     environment:
       # Add the digital ocean token
-      DO_AUTH_TOKEN_FILE: /run/secrets/DO_AUTH_TOKEN # --> Use the file version because Docker mounts secrets at file
+      DO_AUTH_TOKEN_FILE: /run/secrets/do_auth_token # --> Use the file version because Docker mounts secrets at file
       
   # Hashicorp vault for secret management
   vault:
