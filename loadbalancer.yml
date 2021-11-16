@@ -59,8 +59,8 @@ services:
         - traefik.http.routers.http-catchall.middlewares=redirect-to-https
         - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
         
-        # use the default certificate resolver
-        - traefik.http.routers.traefik.tls.certresolver=default
+        # Enable TLS
+        - traefik.http.routers.traefik.tls=true
         # wildcard certificate to use
         - traefik.http.routers.traefik.tls.domains[0].main=dsilva.dev
         - traefik.http.routers.traefik.tls.domains[0].sans=*.dsilva.dev
