@@ -61,7 +61,7 @@ services:
         
         
         # global wildcard certificates (https://www.reddit.com/r/Traefik/comments/e9ubk2/comment/fan66ij/?utm_source=share&utm_medium=web2x&context=3)
-        - traefik.http.routers.wildcard-certs.tls.certresolver=cloudflare
+        - traefik.http.routers.wildcard-certs.tls.certresolver=digitalocean
         - traefik.http.routers.wildcard-certs.tls.domains[0].main=dsilva.dev
         - traefik.http.routers.wildcard-certs.tls.domains[0].sans=*.dsilva.dev
         
