@@ -56,6 +56,7 @@ services:
         # admin-auth middleware with HTTP Basic auth
         - traefik.http.middlewares.admin-auth.basicauth.users=admin:$$apr1$$aJxfzY1Z$$Kh6FWCDTR/GKEXalL1qdT0
         # Add routing for this service
+        - traefik.http.routers.traefik-public.entrypoints=websecure
         - traefik.http.routers.traefik-public.rule=Host(`traefik.dsilva.dev`)
         # Use the special Traefik service api@internal with the web UI/Dashboard
         - traefik.http.routers.traefik-public.service=api@internal
@@ -127,6 +128,7 @@ services:
         # Add required label for traefik (Traefik will only use services with this label)
         - traefik.constraint-label=traefik-public
         # Add routing for this service
+        - traefik.http.routers.vault.entrypoints=websecure
         - traefik.http.routers.vault.rule=Host(`vault.dsilva.dev`)
         # Define the port inside of the Docker service to use
         - traefik.http.services.vault.loadbalancer.server.port=8200
