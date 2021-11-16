@@ -98,7 +98,16 @@ services:
       # any other service that needs to be publicly available with HTTPS
       - traefik-public
 
-
+    # Mount secrets from Docker
+    secrets:
+      # Digital Ocean auth token for WildCard DNS Challenge
+      - DO_AUTH_TOKEN
+    
+    # Environment variables
+    environment:
+      # Add the digital ocean token
+      DO_AUTH_TOKEN_FILE: /run/secrets/DO_AUTH_TOKEN # --> Use the file version because Docker mounts secrets at file
+      
   # Hashicorp vault for secret management
   vault:
     image: vault:1.8.4
