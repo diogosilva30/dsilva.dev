@@ -99,7 +99,7 @@ services:
       - --certificatesresolvers.le.acme.dnschallenge=true
       # A provider must be specified
       - --certificatesresolvers.le.acme.dnschallenge.provider=digitalocean
-      - --certificatesresolvers.myresolver.acme.dnschallenge.delaybeforecheck=0
+      - --certificatesresolvers.le.acme.dnschallenge.delaybeforecheck=0
       # Store the Let's Encrypt certificates in the mounted volume
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
       # Enable the access log, with HTTP requests
